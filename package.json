@@ -1,0 +1,18 @@
+{
+  "author": "W. Cole Davis <cole@xtuple.com>",
+  "name": "proxy",
+  "description": "Reverse proxy service",
+  "version": "0.0.0",
+  "repository": {
+    "url": "git@github.com/xtuple/node-proxy.git"
+  },
+  "main": "main.js",
+  "dependencies": {
+    "http-proxy":""
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
