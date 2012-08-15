@@ -3,12 +3,12 @@
 require("xt");
 
 var httpProxy = require("http-proxy"), https = require("https"), 
-    proxy1, proxy2, server, options, fs = XT.fs, path = XT.path,
-    parser = XT.connect.utils.parseCookie, map = {}, proxies;
+    proxy1, proxy2, server, options, fs = X.fs, path = X.path,
+    parser = X.connect.utils.parseCookie, map = {}, proxies;
 
-XT.debugging = true;
+X.debugging = true;
 
-XT.setup({
+X.setup({
   requireServer: true,
   autoStart: true
 });
@@ -18,7 +18,7 @@ require("./lib/redirector");
 // it looks like it will need to have an instance of proxy
 // for each available datasource to be able to properly proxy
 // the websockets...
-keys = path.join(XT.basePath, "../node-datasource/lib/private");
+keys = path.join(X.basePath, "../node-datasource/lib/private");
 options = {
   key: fs.readFileSync(path.join(keys, "key.pem"), "utf8").trim(),
   cert: fs.readFileSync(path.join(keys, "cert.crt"), "utf8").trim()
@@ -42,15 +42,15 @@ proxy2 = new httpProxy.HttpProxy({
 
 proxies = [proxy1, proxy2];
 
-server = XT.connect(options);
-server.use(XT.connect.cookieParser());
+server = X.connect(options);
+server.use(X.connect.cookieParser());
 server.use(function (req, res) {
-  XT.debug("https request %@".f(req.url));
+  X.debug("https request %@".f(req.url));
   var sid, cookie, proxy = proxies.shift();
   if (req.url.match(/socket\.io/g)) {
-    sid = XT.json(req.cookies.xtsessioncookie).sid;
+    sid = X.json(req.cookies.xtsessioncookie).sid;
     map[sid] = proxy;
-    XT.debug("mapped sid: %@ from request %@".f(sid, req.url));
+    X.debug("mapped sid: %@ from request %@".f(sid, req.url));
   }
   proxy.proxyRequest(req, res);
   proxies.push(proxy);
@@ -58,9 +58,9 @@ server.use(function (req, res) {
 
 server.on("upgrade", function (req, socket, head) {
   var cookie, sid, proxy;
-  cookie = XT.json(parser(req.headers.cookie).xtsessioncookie);
+  cookie = X.json(parser(req.headers.cookie).xtsessioncookie);
   sid = cookie.sid;
-  XT.debug("upgrade request for %@ by %@".f(sid, req.url));
+  X.debug("upgrade request for %@ by %@".f(sid, req.url));
   proxy = map[sid];
   proxy.proxyWebSocketRequest(req, socket, head);
   delete map[sid];
