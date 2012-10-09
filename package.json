@@ -8,7 +8,8 @@
   },
   "main": "main.js",
   "dependencies": {
-    "http-proxy":""
+    "http-proxy":"",
+    "xt": "git://github.com/xtuple/node-xt.git#master"
   },
   "devDependencies": {},
   "optionalDependencies": {},
